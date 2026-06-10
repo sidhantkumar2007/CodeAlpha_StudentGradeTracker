@@ -1,6 +1,6 @@
 # 📊 Student Grade Tracker
 
-![Screenshot](screenshot.png)
+![Screenshot](https://github.com/sidhantkumar2007/CodeAlpha_StudentGradeTracker/blob/main/Screenshot%202026-06-10%20125520.png?raw=true)
 
 
 A Java Swing desktop application for tracking student grades.
