@@ -1,6 +1,6 @@
 # 📊 Student Grade Tracker
 
-A Java Swing desktop application for tracking student grades, built as **Task 1** of the **CodeAlpha Java Programming Internship**.
+A Java Swing desktop application for tracking student grades.
 
 ---
 
