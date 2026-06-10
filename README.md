@@ -1,5 +1,5 @@
 # 📊 Student Grade Tracker
-![Screenshot](Screenshot .png)
+
 
 A Java Swing desktop application for tracking student grades.
 
