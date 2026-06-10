@@ -80,7 +80,9 @@ java StudentGradeTrackerGUI
 6. **Remove a student** — Select the student from the dropdown and click **Remove Selected**.
 
 ---
-
 ## Author
 
-Built for the **CodeAlpha Java Programming Internship** — Task 1.
+**Sidhant Kumar**
+🎓 Java Programming Intern @ CodeAlpha
+🐙 GitHub: [sidhantkumar2007](https://github.com/sidhantkumar2007)
+📌 Project: CodeAlpha Internship — Task 1
