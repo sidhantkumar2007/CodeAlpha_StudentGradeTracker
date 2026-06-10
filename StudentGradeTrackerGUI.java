@@ -3,11 +3,13 @@ import javax.swing.table.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.*;
 
 /**
  * CodeAlpha — Task 1: Student Grade Tracker (GUI Version)
  * Built with Java Swing
+ * Updated: Added Save/Load feature
  */
 public class StudentGradeTrackerGUI extends JFrame {
 
@@ -17,6 +19,7 @@ public class StudentGradeTrackerGUI extends JFrame {
     static final Color ACCENT    = new Color(99, 102, 241);
     static final Color ACCENT2   = new Color(16, 185, 129);
     static final Color DANGER    = new Color(239, 68, 68);
+    static final Color YELLOW    = new Color(234, 179, 8);
     static final Color TEXT      = new Color(248, 250, 252);
     static final Color SUBTEXT   = new Color(148, 163, 184);
     static final Color BORDER    = new Color(51, 65, 85);
@@ -163,6 +166,16 @@ public class StudentGradeTrackerGUI extends JFrame {
         removeCard.add(Box.createVerticalStrut(8));
         removeCard.add(removeBtn);
 
+        // ── Save / Load card ─────────────────────────────────────────────
+        JPanel fileCard = card("💾 Save / Load");
+        JButton saveBtn = accentBtn("💾 Save Data", ACCENT);
+        JButton loadBtn = accentBtn("📂 Load Data", YELLOW);
+        saveBtn.addActionListener(e -> saveData());
+        loadBtn.addActionListener(e -> loadData());
+        fileCard.add(saveBtn);
+        fileCard.add(Box.createVerticalStrut(6));
+        fileCard.add(loadBtn);
+
         // Timer to update combo
         javax.swing.Timer t = new javax.swing.Timer(500, e -> {
             String prev = (String) studentCombo.getSelectedItem();
@@ -174,7 +187,8 @@ public class StudentGradeTrackerGUI extends JFrame {
 
         p.add(addCard); p.add(Box.createVerticalStrut(12));
         p.add(gradeCard); p.add(Box.createVerticalStrut(12));
-        p.add(removeCard);
+        p.add(removeCard); p.add(Box.createVerticalStrut(12));
+        p.add(fileCard);
         return p;
     }
 
@@ -300,6 +314,43 @@ public class StudentGradeTrackerGUI extends JFrame {
         sc.setBorder(BorderFactory.createLineBorder(BORDER));
         p.add(sc);
         return p;
+    }
+
+    // ── Save / Load ───────────────────────────────────────────────────────
+    void saveData() {
+        try (PrintWriter pw = new PrintWriter(new FileWriter("grades.txt"))) {
+            for (Student s : students) {
+                pw.print(s.name);
+                for (double g : s.grades) pw.print("," + g);
+                pw.println();
+            }
+            showSuccess("Data saved to grades.txt ✅");
+        } catch (IOException ex) {
+            showError("Failed to save: " + ex.getMessage());
+        }
+    }
+
+    void loadData() {
+        File f = new File("grades.txt");
+        if (!f.exists()) { showError("No saved data found (grades.txt missing)."); return; }
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+            students.clear();
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 0 || parts[0].isBlank()) continue;
+                Student s = new Student(parts[0]);
+                for (int i = 1; i < parts.length; i++) {
+                    try { s.grades.add(Double.parseDouble(parts[i])); } catch (NumberFormatException ignored) {}
+                }
+                students.add(s);
+            }
+            refreshTable();
+            updateStats();
+            showSuccess("Data loaded successfully! ✅");
+        } catch (IOException ex) {
+            showError("Failed to load: " + ex.getMessage());
+        }
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────
